@@ -1,17 +1,12 @@
 const { response } = require('express'); //Esto no sobre escribe, sino que mantiene el uso de...
+const { validationResult } = require("express-validator");
 
 const crearUsuario = ( req, res = response ) => {
 
     const {name, email, password} = req.body;
+ 
 
-    if( name.length < 5){
-        return res.status(400).json({
-            ok: false,
-            msg:'El nombre debe ser de 5 letras'
-        })
-    }
-    
-    res.json({
+    res.status(201).json({
         ok: true,
         msg:'Registrando usuario',
         name, email, password
@@ -21,8 +16,10 @@ const crearUsuario = ( req, res = response ) => {
 
 const loginUsuario = ( req, res = response ) => {
 
-    const {name, email, password} = req.body;
-    res.json({
+    const {email, password} = req.body;
+   
+
+    res.status(200).json({
         ok: true,
         msg:'login',
         email,
