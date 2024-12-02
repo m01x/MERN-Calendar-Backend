@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { response } = require('express'); //Esto no sobre escribe, sino que mantiene el uso de...
 const bcrypt = require('bcryptjs');
 const { validationResult } = require("express-validator");
@@ -45,17 +46,49 @@ const crearUsuario = async( req, res = response ) => {
 
 }
 
-const loginUsuario = ( req, res = response ) => {
+const loginUsuario = async( req, res = response ) => {
 
     const {email, password} = req.body;
-   
+    try {
+        
 
-    res.status(200).json({
-        ok: true,
-        msg:'login',
-        email,
-        password
-    });
+        //Ver si existe el usuario
+        const emailLimpio = email.trim().toLowerCase();
+        const usuario = await Usuario.findOne({ email: emailLimpio });
+
+        if( !usuario ){
+            return res.status(400).json({
+                ok: false,
+                msg: 'El usuario no existe con ese email'
+            });
+        }
+        
+        //Confirmas los password
+        const validPassword = bcrypt.compareSync( password, usuario.password);
+
+        if(!validPassword){
+            return res.status(400).json({
+                ok:false,
+                msg:'Password incorrecto'
+            })
+        }   
+        
+        //* Conceder acceso, generar nuestro json web token
+
+        res.json({
+            ok:true,
+            uid: usuario.id,
+            name: usuario.name
+        })
+
+    } catch (error) {
+        console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
+        res.status(500).json({
+            ok:false,
+            msg: 'Por favor, comuniquese con su Sys Admin.'
+        });
+        
+    }
 };
 
 const revalidarToken = ( req, res = response ) => {
