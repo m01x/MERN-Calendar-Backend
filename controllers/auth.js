@@ -3,6 +3,7 @@ const { response } = require('express'); //Esto no sobre escribe, sino que manti
 const bcrypt = require('bcryptjs');
 const { validationResult } = require("express-validator");
 const Usuario = require('../models/Usuario');
+const { generarJWT } = require('../helpers/jwt');
 
 const crearUsuario = async( req, res = response ) => {
 
@@ -25,12 +26,16 @@ const crearUsuario = async( req, res = response ) => {
         usuario.password = bcrypt.hashSync(password, salt);
 
         await usuario.save();
+
+        //Generar JWT
     
+        const token = await generarJWT( usuario.id, usuario.name );
 
         res.status(201).json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
+            name: usuario.name,
+            token
         });
         
     } catch (error) {
@@ -74,11 +79,13 @@ const loginUsuario = async( req, res = response ) => {
         }   
         
         //* Conceder acceso, generar nuestro json web token
+        const token = await generarJWT( usuario.id, usuario.name );
 
         res.json({
             ok:true,
             uid: usuario.id,
-            name: usuario.name
+            name: usuario.name,
+            token
         })
 
     } catch (error) {
@@ -91,10 +98,18 @@ const loginUsuario = async( req, res = response ) => {
     }
 };
 
-const revalidarToken = ( req, res = response ) => {
+const revalidarToken = async( req, res = response ) => {
+    //revalida el token por otras 2 horas mas. Me servira para saber si el token es valido y mantener al usuario logeado
+    
+    const uid = req.uid;
+    const name = req.name;
+
+    //Generar un nuevo jwt y retornarlo en esta petición.
+    const token = await generarJWT(uid, name);
+
     res.json({
         ok: true,
-        msg:'renew token'
+        token
     });
 };
 
