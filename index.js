@@ -9,6 +9,8 @@ const app = express();
 //Base de datos
 dbConnection();
 
+//CORS
+
 
 
 //Directorio publico
