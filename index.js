@@ -22,12 +22,9 @@ app.use( express.json()); //middleware
 
 
 //Rutas
-/**
- * TODO: auth / Crear / Login / Renew
- * TODO: CRUD evento
- */
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/events', require('./routes/events'));
 
 //Escuchar peticiones
 app.listen( process.env.PORT, () => {
