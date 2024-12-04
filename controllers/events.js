@@ -1,5 +1,6 @@
 
 const { response } = require('express');
+const Evento = require('../models/Evento');
 
 
 const getEventos = async(req, res = response) => {
@@ -18,17 +19,22 @@ const getEventos = async(req, res = response) => {
   
 }
 
-const crearEvento = async(req, res = response) => {
+const crearEvento = async( req, res = response) => {
+
+    const evento = new Evento(req.body);
+    console.log(req.uid);
     try {
+        evento.user = req.uid;
+        const eventoGuardado = await evento.save();
         res.status(201).json({
             ok: true,
-            msg:'Consulta realizada crearEvento'
+            evento:eventoGuardado
         });
     } catch (error) {
         console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
         res.status(500).json({
             ok:false,
-            msg: 'Por favor, comuniquese con su Sys Admin.'
+            msg: '[CrearEvento Controller]: Por favor, comuniquese con su Sys Admin.'
         });
     }
   

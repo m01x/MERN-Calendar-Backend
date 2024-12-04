@@ -1,10 +1,13 @@
 
-//Tarea!
-//Todas tienen que pasar por la validacion del JWT.
+//mas facil el backend y el pibe InitialD dice q es peluo jsjsjssj (por lo menos node)
+//Cuando me salgan cocos mas grandes, ire por laravel :B
 
 const { Router } = require("express");
-const router = Router();
 const { check } = require("express-validator");
+const router = Router();
+
+const { isDate } = require('../helpers/isDate');
+const { validarCampos } = require('../middlewares/validar-campos');
 const {getEventos, crearEvento, actualizarEvento, eliminarEvento} = require('../controllers/events');
 const { validarJWT } = require("../middlewares/validar-jwt");
 
@@ -12,17 +15,18 @@ const { validarJWT } = require("../middlewares/validar-jwt");
 router.get( '/', validarJWT ,getEventos );
 
 // Crear un nuevo evento
-router.post( '/', validarJWT ,crearEvento );
+router.post( '/', [
+    check('title', 'El titulo es obligatorio').not().isEmpty(),
+    check('start', 'Fecha de inicio es obligatoria').custom(isDate),
+    check('end', 'Fecha de término es obligatoria').custom(isDate),
+    validarCampos,
+    validarJWT
+] ,crearEvento );
 
 //Actualizar Evento
 router.put( '/:id', [ check('id').not().isEmpty(), validarJWT ], actualizarEvento );
 
 router.delete( '/:id' , [ check('id').not().isEmpty(), validarJWT ] , eliminarEvento );
-
-/**
- * todo: Agregar middlewares y validaciones, y en el controller\events ,
- *      implementar los controladores de cada ruta
- */
 
 module.exports = router;
 
