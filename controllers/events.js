@@ -1,0 +1,74 @@
+
+const { response } = require('express');
+
+
+const getEventos = async(req, res = response) => {
+    try {
+        res.status(201).json({
+            ok: true,
+            msg:'Consulta realizada getEventos'
+        });
+    } catch (error) {
+        console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
+        res.status(500).json({
+            ok:false,
+            msg: 'Por favor, comuniquese con su Sys Admin.'
+        });
+    }
+  
+}
+
+const crearEvento = async(req, res = response) => {
+    try {
+        res.status(201).json({
+            ok: true,
+            msg:'Consulta realizada crearEvento'
+        });
+    } catch (error) {
+        console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
+        res.status(500).json({
+            ok:false,
+            msg: 'Por favor, comuniquese con su Sys Admin.'
+        });
+    }
+  
+}
+
+const actualizarEvento = async(req, res = response) => {
+    try {
+        res.status(201).json({
+            ok: true,
+            msg:'Consulta realizada actualizarEvento'
+        });
+    } catch (error) {
+        console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
+        res.status(500).json({
+            ok:false,
+            msg: 'Por favor, comuniquese con su Sys Admin.'
+        });
+    }
+  
+}
+
+const eliminarEvento = async(req, res = response) => {
+    try {
+        res.status(201).json({
+            ok: true,
+            msg:'Consulta realizada eliminarEvento'
+        });
+    } catch (error) {
+        console.log(error); //Error para el log del servidor, no queremos dar detalle al usuario.
+        res.status(500).json({
+            ok:false,
+            msg: 'Por favor, comuniquese con su Sys Admin.'
+        });
+    }
+  
+}
+
+module.exports = {
+    getEventos,
+    crearEvento,
+    actualizarEvento,
+    eliminarEvento,
+}
