@@ -10,7 +10,11 @@ const app = express();
 dbConnection();
 
 //CORS
-
+app.use(cors({
+  origin: 'http://localhost:5173', // Reemplaza con la URL de tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  credentials: true // Si necesitas enviar cookies o encabezados de autenticación
+}));
 
 
 //Directorio publico
