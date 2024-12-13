@@ -26,7 +26,6 @@ const getEventos = async(req, res = response) => {
 const crearEvento = async( req, res = response) => {
 
     const evento = new Evento(req.body);
-    console.log(req.uid);
     try {
         evento.user = req.uid;
         const eventoGuardado = await evento.save();
